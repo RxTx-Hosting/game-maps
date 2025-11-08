@@ -1,5 +1,3 @@
-// Generic 16x16 grid: Columns are letters (A-P), Rows are numbers (1-16)
-// Grid cells: A1, B1, C1... A2, B2, C2... etc
 MapGrids.generic_16x16_col = function(gridLayerGroup, width, height, options = {}) {
     const gridCols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
     const gridRows = 16;

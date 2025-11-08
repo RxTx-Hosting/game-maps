@@ -221,12 +221,32 @@ def generate_html(map_data):
         .copy-btn:hover {{
             background: rgba(255, 255, 255, 0.2);
         }}
+        .grid-selector {{
+            width: 100%;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }}
+        .grid-selector option {{
+            background: #1a1a1a;
+            color: white;
+        }}
     </style>
 </head>
 <body>
     <div class="sidebar">
         <h1>{map_data.map.name}</h1>
         <p>Map Preview</p>
+        <div style="margin-bottom: 20px;">
+            <h3 style="margin-bottom: 12px;">Grid System</h3>
+            <select class="grid-selector" id="grid-selector">
+                <option value="">None</option>
+            </select>
+        </div>
         <div>
             <h3 style="margin-bottom: 12px;">Categories</h3>
             <div id="category-filters"></div>
@@ -296,10 +316,8 @@ def generate_html(map_data):
         ];
         leafletMap.setMaxBounds(extendedBounds);
 
-        // Add grid if available
-        if (mapData.gridSystem && typeof MapGrids !== 'undefined' && MapGrids[mapData.gridSystem]) {{
-            let gridLayerGroup = L.layerGroup().addTo(leafletMap);
-            const gridOptions = {
+        let currentGridLayer = null;
+        const gridOptions = {
         json.dumps(
             {
                 "lineColor": map_data.map.grid_options.line_color
@@ -323,10 +341,40 @@ def generate_html(map_data):
             }
         )
     };
-            MapGrids[mapData.gridSystem](gridLayerGroup, mapData.width, mapData.height, gridOptions);
+
+        function loadGrid(gridSystemName) {{
+            if (currentGridLayer) {{
+                leafletMap.removeLayer(currentGridLayer);
+                currentGridLayer = null;
+            }}
+
+            if (gridSystemName && typeof MapGrids !== 'undefined' && MapGrids[gridSystemName]) {{
+                currentGridLayer = L.layerGroup().addTo(leafletMap);
+                MapGrids[gridSystemName](currentGridLayer, mapData.width, mapData.height, gridOptions);
+            }}
         }}
 
-        // SVG loading function
+        const gridSelector = document.getElementById('grid-selector');
+        if (typeof MapGrids !== 'undefined') {{
+            Object.keys(MapGrids).forEach(gridName => {{
+                const option = document.createElement('option');
+                option.value = gridName;
+                option.textContent = gridName;
+                if (gridName === mapData.gridSystem) {{
+                    option.selected = true;
+                }}
+                gridSelector.appendChild(option);
+            }});
+        }}
+
+        if (mapData.gridSystem) {{
+            loadGrid(mapData.gridSystem);
+        }}
+
+        gridSelector.addEventListener('change', function(e) {{
+            loadGrid(e.target.value);
+        }})
+
         const svgCache = {{}};
         function hexToRgba(hex, alpha) {{
             const r = parseInt(hex.slice(1, 3), 16);
@@ -464,7 +512,6 @@ def generate_html(map_data):
         }});
     }});
 
-    // Coordinate tracking
     const mouseCoords = document.getElementById('mouse-coords');
     const clickedCoords = document.getElementById('clicked-coords');
     const copyBtn = document.getElementById('copy-btn');

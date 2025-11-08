@@ -1,5 +1,3 @@
-// Generic 10x10 grid: Rows are letters (A-J), Columns are numbers (1-10)
-// Grid cells: A1, A2, A3... B1, B2, B3... etc
 MapGrids.generic_10x10 = function(gridLayerGroup, width, height, options = {}) {
     const gridRows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
     const gridCols = 10;
@@ -20,9 +18,9 @@ MapGrids.generic_10x10 = function(gridLayerGroup, width, height, options = {}) {
     for (let row = 0; row < gridRows.length; row++) {
         for (let col = 0; col < gridCols; col++) {
             const x1 = col * cellWidth;
-            const y1 = row * cellHeight;
+            const y1 = height - (row + 1) * cellHeight;
             const x2 = x1 + cellWidth;
-            const y2 = y1 + cellHeight;
+            const y2 = height - row * cellHeight;
             const gridLabel = gridRows[row] + (col + 1);
 
             L.rectangle([[y1, x1], [y2, x2]], {
@@ -49,7 +47,7 @@ MapGrids.generic_10x10 = function(gridLayerGroup, width, height, options = {}) {
             });
 
             const labelX = x1 + cellWidth * 0.05;
-            const labelY = y1 + cellHeight * 0.05;
+            const labelY = y2 - cellHeight * 0.05;
 
             const labelMarker = L.marker([labelY, labelX], {
                 icon: L.divIcon({
