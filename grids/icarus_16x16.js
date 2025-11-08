@@ -1,5 +1,4 @@
-const MapGrids = {
-    icarus_16x16: function(gridLayerGroup, width, height, options = {}) {
+MapGrids.icarus_16x16 = function(gridLayerGroup, width, height, options = {}) {
         const gridCols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
         const gridRows = 16;
         const cellWidth = width / gridCols.length;
@@ -77,5 +76,4 @@ const MapGrids = {
             width: width,
             height: height
         };
-    }
 };

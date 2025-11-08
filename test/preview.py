@@ -1,13 +1,3 @@
-#!/usr/bin/env python3
-"""
-Generate a standalone HTML preview of a game map.
-
-Usage:
-    python test/preview.py icarus/olympus.py
-
-This will create a preview.html file that you can open in your browser.
-"""
-
 import argparse
 import importlib.util
 import json
@@ -17,19 +7,24 @@ from pathlib import Path
 
 def load_map_data(map_file: str):
     """Load map data from a Python module."""
-    map_path = Path(map_file)
+    map_path = Path(map_file).resolve()
     if not map_path.exists():
         print(f"Error: Map file '{map_file}' not found")
         sys.exit(1)
 
-    spec = importlib.util.spec_from_file_location("map_module", map_path)
-    if spec is None or spec.loader is None:
-        print(f"Error: Failed to load module from '{map_file}'")
-        sys.exit(1)
+    maps_root = Path(__file__).parent.parent.resolve()
+    maps_parent = maps_root.parent
+    maps_package_name = maps_root.name
 
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["map_module"] = module
-    spec.loader.exec_module(module)
+    if str(maps_parent) not in sys.path:
+        sys.path.insert(0, str(maps_parent))
+
+    relative_path = map_path.relative_to(maps_root)
+    module_name = f"{maps_package_name}.{str(relative_path.with_suffix('')).replace('/', '.')}"
+
+    import importlib
+
+    module = importlib.import_module(module_name)
 
     if not hasattr(module, "DATA"):
         print(f"Error: '{map_file}' must define a DATA variable")
@@ -40,53 +35,57 @@ def load_map_data(map_file: str):
 
 def generate_html(map_data):
     """Generate standalone HTML for the map preview."""
-    # Prepare categories
     categories_dict = []
     category_slug_to_id = {}
     category_data = {}
 
     for idx, cat in enumerate(map_data.categories):
         cat_id = str(idx)
-        categories_dict.append({
-            "id": cat_id,
-            "slug": cat.slug,
-            "name": cat.name,
-            "color": cat.color,
-            "is_visible_by_default": cat.is_visible_by_default,
-            "icon": cat.icon,
-        })
+        categories_dict.append(
+            {
+                "id": cat_id,
+                "slug": cat.slug,
+                "name": cat.name,
+                "color": cat.color,
+                "is_visible_by_default": cat.is_visible_by_default,
+                "icon": cat.icon,
+            }
+        )
         category_slug_to_id[cat.slug] = cat_id
         category_data[cat.slug] = cat
 
-    # Prepare markers
     markers_dict = []
     for marker in map_data.markers:
         category_id = category_slug_to_id.get(marker.category_slug)
         if not category_id:
-            print(f"Warning: Category {marker.category_slug} not found for marker {marker.name}")
+            print(
+                f"Warning: Category {marker.category_slug} not found for marker {marker.name}"
+            )
             continue
 
         category = category_data.get(marker.category_slug)
         icon = marker.icon or (category.icon if category else None)
-        description = marker.description or (category.default_description if category else None)
+        description = marker.description or (
+            category.default_description if category else None
+        )
 
-        markers_dict.append({
-            "name": marker.name,
-            "description": description,
-            "category_id": category_id,
-            "position_x": marker.position_x,
-            "position_y": marker.position_y,
-            "icon": icon,
-        })
+        markers_dict.append(
+            {
+                "name": marker.name,
+                "description": description,
+                "category_id": category_id,
+                "position_x": marker.position_x,
+                "position_y": marker.position_y,
+                "icon": icon,
+            }
+        )
 
-    # Read grid system JS
     grid_js = ""
-    if map_data.map.grid_system:
-        grid_file = Path(f"grids/{map_data.map.grid_system}.js")
-        if grid_file.exists():
-            grid_js = grid_file.read_text()
+    grids_dir = Path(__file__).parent.parent / "grids"
+    if grids_dir.exists():
+        grid_files = sorted(grids_dir.glob("*.js"))
+        grid_js = "\n".join([f.read_text() for f in grid_files])
 
-    # Generate HTML
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -183,6 +182,45 @@ def generate_html(map_data):
             justify-content: center;
             z-index: 1;
         }}
+        .coords-overlay {{
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            min-width: 200px;
+        }}
+        .coords-row {{
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }}
+        .coords-label {{
+            color: #888;
+            margin-right: 12px;
+        }}
+        .coords-value {{
+            font-family: monospace;
+            color: #fff;
+        }}
+        .copy-btn {{
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+            width: 100%;
+        }}
+        .copy-btn:hover {{
+            background: rgba(255, 255, 255, 0.2);
+        }}
     </style>
 </head>
 <body>
@@ -193,6 +231,18 @@ def generate_html(map_data):
             <h3 style="margin-bottom: 12px;">Categories</h3>
             <div id="category-filters"></div>
         </div>
+    </div>
+    <div class="coords-overlay">
+        <div style="font-weight: bold; margin-bottom: 12px;">Coordinates</div>
+        <div class="coords-row">
+            <span class="coords-label">Mouse:</span>
+            <span class="coords-value" id="mouse-coords">-</span>
+        </div>
+        <div class="coords-row">
+            <span class="coords-label">Clicked:</span>
+            <span class="coords-value" id="clicked-coords">-</span>
+        </div>
+        <button class="copy-btn" id="copy-btn">Copy Clicked Position</button>
     </div>
     <div id="map"></div>
 
@@ -249,14 +299,30 @@ def generate_html(map_data):
         // Add grid if available
         if (mapData.gridSystem && typeof MapGrids !== 'undefined' && MapGrids[mapData.gridSystem]) {{
             let gridLayerGroup = L.layerGroup().addTo(leafletMap);
-            const gridOptions = {json.dumps({
-                "lineColor": map_data.map.grid_options.line_color if map_data.map.grid_options else "#ffffff",
-                "lineOpacity": map_data.map.grid_options.line_opacity if map_data.map.grid_options else 0.5,
-                "lineWeight": map_data.map.grid_options.line_weight if map_data.map.grid_options else 1.5,
-                "labelColor": map_data.map.grid_options.label_color if map_data.map.grid_options else "#ffffff",
-                "labelOpacity": map_data.map.grid_options.label_opacity if map_data.map.grid_options else 0.7,
-                "labelSize": map_data.map.grid_options.label_size if map_data.map.grid_options else 20
-            })};
+            const gridOptions = {
+        json.dumps(
+            {
+                "lineColor": map_data.map.grid_options.line_color
+                if map_data.map.grid_options
+                else "#ffffff",
+                "lineOpacity": map_data.map.grid_options.line_opacity
+                if map_data.map.grid_options
+                else 0.5,
+                "lineWeight": map_data.map.grid_options.line_weight
+                if map_data.map.grid_options
+                else 1.5,
+                "labelColor": map_data.map.grid_options.label_color
+                if map_data.map.grid_options
+                else "#ffffff",
+                "labelOpacity": map_data.map.grid_options.label_opacity
+                if map_data.map.grid_options
+                else 0.7,
+                "labelSize": map_data.map.grid_options.label_size
+                if map_data.map.grid_options
+                else 20,
+            }
+        )
+    };
             MapGrids[mapData.gridSystem](gridLayerGroup, mapData.width, mapData.height, gridOptions);
         }}
 
@@ -397,6 +463,40 @@ def generate_html(map_data):
             }}
         }});
     }});
+
+    // Coordinate tracking
+    const mouseCoords = document.getElementById('mouse-coords');
+    const clickedCoords = document.getElementById('clicked-coords');
+    const copyBtn = document.getElementById('copy-btn');
+    let clickedPosition = null;
+
+    leafletMap.on('mousemove', function(e) {{
+        const x = (e.latlng.lng / mapData.width).toFixed(6);
+        const y = (e.latlng.lat / mapData.height).toFixed(6);
+        mouseCoords.textContent = `x: ${{x}}, y: ${{y}}`;
+    }});
+
+    leafletMap.on('click', function(e) {{
+        const x = (e.latlng.lng / mapData.width).toFixed(6);
+        const y = (e.latlng.lat / mapData.height).toFixed(6);
+        clickedPosition = {{ x, y }};
+        clickedCoords.textContent = `x: ${{x}}, y: ${{y}}`;
+        console.log(`Clicked position - x: ${{x}}, y: ${{y}}`);
+    }});
+
+    copyBtn.addEventListener('click', function() {{
+        if (clickedPosition) {{
+            const text = `position_x=${{clickedPosition.x}},\\nposition_y=${{clickedPosition.y}}`;
+            navigator.clipboard.writeText(text).then(() => {{
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {{
+                    copyBtn.textContent = 'Copy Clicked Position';
+                }}, 2000);
+            }}).catch(err => {{
+                console.error('Failed to copy:', err);
+            }});
+        }}
+    }});
     </script>
 </body>
 </html>"""
@@ -406,20 +506,27 @@ def generate_html(map_data):
 
 def main():
     parser = argparse.ArgumentParser(description="Generate HTML preview of a game map")
-    parser.add_argument("map_file", help="Path to the map Python file (e.g., icarus/olympus.py)")
-    parser.add_argument("-o", "--output", default="preview.html", help="Output HTML file (default: preview.html)")
+    parser.add_argument(
+        "map_file", help="Path to the map Python file (e.g., icarus/olympus.py)"
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        default="preview.html",
+        help="Output HTML file (default: preview.html)",
+    )
     args = parser.parse_args()
 
     print(f"Loading map data from {args.map_file}...")
     map_data = load_map_data(args.map_file)
 
-    print(f"Generating HTML preview...")
+    print("Generating HTML preview...")
     html = generate_html(map_data)
 
     output_path = Path(args.output)
     output_path.write_text(html)
 
-    print(f"✓ Preview generated: {output_path.absolute()}")
+    print(f"Preview generated: {output_path.absolute()}")
     print(f"  Open {output_path.name} in your browser to view the map")
 
 

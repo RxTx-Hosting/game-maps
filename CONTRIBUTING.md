@@ -89,8 +89,9 @@ MapCategoryData(
 **Tips:**
 - Choose a descriptive slug (kebab-case)
 - Pick a color that stands out but fits the theme
-- If using an icon, it should be an SVG for best results
+- If using an icon, it should be a 64x64 SVG filled with `currentColor`
 - The icon will be colored with the category color
+- Custom icons need to be uploaded to the rxtx Hosting CDN - mention this in your PR if adding new icons
 
 ## Adding a New Map
 
