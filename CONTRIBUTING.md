@@ -20,30 +20,37 @@ Thank you for contributing! This guide will help you add or update game maps.
 ### Step 1: Find the Map File
 
 Navigate to the game directory and find the map file. For example:
-- Icarus Olympus: `icarus/olympus.py`
+- Icarus Olympus: `games/icarus/olympus.py`
+- Enshrouded Embervale: `games/enshrouded/embervale.py`
 
 ### Step 2: Add Your Marker
 
-Add a new `MapMarkerData` entry to the `markers` list:
+Find the appropriate category and add a new `MapMarkerData` entry to its `markers` list:
 
 ```python
-MapMarkerData(
-    name="My New Location",
-    category_slug="locations-cave-t1",  # Use an existing category
-    position_x=0.123456,
-    position_y=0.654321,
-    description="Optional description",  # Leave out to use category default
+MapCategoryData(
+    slug="locations-cave-t1",
+    name="Caves - Tier 1",
+    color="#3F7791",
+    markers=[
+        # Existing markers...
+        MapMarkerData(
+            name="My New Cave",
+            position_x=0.123456,
+            position_y=0.654321,
+            description="Optional description",  # Leave out to use category default
+        ),
+    ],
 ),
 ```
 
 ### Step 3: Finding Coordinates
 
 **Method 1: Using the Preview Tool**
-1. Run `python test/preview.py icarus/olympus.py`
+1. Run `python test/preview.py games/icarus/olympus.py`
 2. Open `preview.html` in your browser
-3. Open browser console (F12)
-4. Click on the map where you want the marker
-5. Copy the coordinates from the console
+3. Click on the map where you want the marker
+4. Check the coordinates overlay or browser console for the coordinates
 
 **Method 2: Manual Calculation**
 - `position_x = pixel_x / image_width`
@@ -53,7 +60,7 @@ MapMarkerData(
 ### Step 4: Test Your Changes
 
 ```bash
-python test/preview.py icarus/olympus.py
+python test/preview.py games/icarus/olympus.py
 ```
 
 Open `preview.html` and verify:
@@ -65,7 +72,7 @@ Open `preview.html` and verify:
 ### Step 5: Submit a Pull Request
 
 ```bash
-git add icarus/olympus.py
+git add games/icarus/olympus.py
 git commit -m "Add [marker name] to Olympus map"
 git push origin main
 ```
@@ -81,16 +88,21 @@ MapCategoryData(
     slug="my-category-slug",
     name="My Category Name",
     color="#FF5733",  # Hex color code
-    icon="https://cdn.example.com/icon.svg",  # Optional
+    icon="https://cdn.example.com/icon.svg",  # Optional 64x64 SVG/PNG/WEBP
+    use_pin_style=True,  # True for pin markers, False for simple icons
     default_description="Default marker description",  # Optional
+    markers=[
+        # Add markers here
+    ],
 ),
 ```
 
 **Tips:**
 - Choose a descriptive slug (kebab-case)
 - Pick a color that stands out but fits the theme
-- If using an icon, it should be a 64x64 SVG filled with `currentColor`
-- The icon will be colored with the category color
+- Icons should be 64x64 SVG/PNG/WEBP
+- Set `use_pin_style=True` for pin-style markers with letter fallbacks
+- Set `use_pin_style=False` for simple icon overlays (larger, centered)
 - Custom icons need to be uploaded to the rxtx Hosting CDN - mention this in your PR if adding new icons
 
 ## Adding a New Map
@@ -99,16 +111,17 @@ MapCategoryData(
 
 Create a new file in the appropriate game directory:
 ```bash
-touch icarus/new_map.py
+mkdir -p games/your_game
+touch games/your_game/your_map.py
 ```
 
 ### Step 2: Define the Map
 
 ```python
-from ..game_map import GameMapData, GridStyleOptions
-from ..map_category import MapCategoryData
-from ..map_data import MapData
-from ..map_marker import MapMarkerData
+from ...game_map import GameMapData, GridStyleOptions
+from ...map_category import MapCategoryData
+from ...map_data import MapData
+from ...map_marker import MapMarkerData
 
 
 DATA = MapData(
@@ -116,20 +129,28 @@ DATA = MapData(
         name="Map Display Name",
         slug="map-slug",
         description="Brief description of this map",
-        image_url="https://cdn.example.com/map-image.webp",
-        image_width=2048,  # Actual image width in pixels
-        image_height=2048,  # Actual image height in pixels
+        image_url="https://cdn.example.com/map-image.webp",  # For single image
+        # OR for tile-based maps:
+        # tile_url="https://cdn.example.com/tiles/{x}_{y}.webp",
+        # tile_size=1280,
+        image_width=2048,  # Total map width in pixels
+        image_height=2048,  # Total map height in pixels
         min_zoom=-1,  # How far users can zoom out
         max_zoom=2,   # How far users can zoom in
         default_zoom=0,  # Starting zoom level
         default_center_x=0.5,  # Starting X (0.5 = center)
         default_center_y=0.5,  # Starting Y (0.5 = center)
+        grid_system="generic_16x16",  # Optional grid system
     ),
     categories=[
-        # Add your categories here
-    ],
-    markers=[
-        # Add your markers here
+        MapCategoryData(
+            slug="category-slug",
+            name="Category Name",
+            color="#3F7791",
+            markers=[
+                # Add markers here
+            ],
+        ),
     ],
 )
 ```
@@ -139,18 +160,18 @@ DATA = MapData(
 Add your map to `__init__.py`:
 
 ```python
-from .icarus.new_map import DATA as icarus_new_map_data
+from .games.your_game.your_map import DATA as your_game_your_map_data
 
 MAPS: dict[tuple[str, str], MapData] = {
     # ... existing maps ...
-    ("game_icarus", "new_map"): icarus_new_map_data,
+    ("game_your_game", "your_map"): your_game_your_map_data,
 }
 ```
 
 ### Step 4: Test
 
 ```bash
-python test/preview.py icarus/new_map.py
+python test/preview.py games/your_game/your_map.py
 ```
 
 ## Creating a Grid System
@@ -165,10 +186,11 @@ Key components:
 
 ## Code Style
 
-- Use relative imports (e.g., `from ..game_map import GameMapData`)
+- Use relative imports from the games directory (e.g., `from ...game_map import GameMapData`)
 - Follow existing formatting patterns
-- Keep marker lists alphabetically sorted by name (optional but helpful)
+- Keep marker lists alphabetically sorted by name within each category (optional but helpful)
 - Use descriptive names for categories and markers
+- Markers are now nested under their categories, not in a separate top-level list
 
 ## Pull Request Guidelines
 

@@ -1,0 +1,469 @@
+from ...game_map import GameMapData, GridStyleOptions
+from ...map_category import MapCategoryData
+from ...map_data import MapData
+from ...map_marker import MapMarkerData
+
+
+DATA = MapData(
+    map=GameMapData(
+        name="Olympus",
+        slug="olympus",
+        description="The vast Olympus biome",
+        image_url="https://cdn.rxtx-hosting.com/images/games/game_icarus/maps/olympus.webp",
+        image_width=2048,
+        image_height=2048,
+        min_zoom=-1,
+        max_zoom=2,
+        default_zoom=0,
+        default_center_x=0.5,
+        default_center_y=0.5,
+        grid_system="icarus_16x16",
+        grid_options=GridStyleOptions(
+            line_color="#ffffff",
+            line_opacity=0.5,
+            line_weight=1.5,
+            label_color="#ffffff",
+            label_opacity=0.9,
+            label_size=20,
+        ),
+    ),
+    categories=[
+        MapCategoryData(
+            slug="locations-cave-t1",
+            name="Caves - Tier 1",
+            color="#3F7791",
+            icon="https://cdn.rxtx-hosting.com/images/games/game_icarus/maps/icons/cave-t1.svg",
+            default_description="Tier 1 Cave",
+            markers=[
+                MapMarkerData(
+                    name="B3 Cave - West", position_x=0.064453, position_y=0.854980
+                ),
+                MapMarkerData(name="E3 Cave", position_x=0.258423, position_y=0.865601),
+                MapMarkerData(
+                    name="E3 Cave - East", position_x=0.312012, position_y=0.865234
+                ),
+                MapMarkerData(
+                    name="M3 Cave - Central", position_x=0.780396, position_y=0.843506
+                ),
+                MapMarkerData(
+                    name="M3 Save - West", position_x=0.754028, position_y=0.836182
+                ),
+                MapMarkerData(name="L3 Cave", position_x=0.697998, position_y=0.814087),
+                MapMarkerData(name="G4 Cave", position_x=0.376023, position_y=0.778520),
+                MapMarkerData(
+                    name="L4 Cave - West", position_x=0.703857, position_y=0.785767
+                ),
+                MapMarkerData(
+                    name="L4 Cave - North", position_x=0.725220, position_y=0.795654
+                ),
+                MapMarkerData(
+                    name="M4 Cave - South", position_x=0.801636, position_y=0.752686
+                ),
+                MapMarkerData(
+                    name="M4 Cave - South East",
+                    position_x=0.810547,
+                    position_y=0.753662,
+                ),
+                MapMarkerData(
+                    name="N5 Cave - North", position_x=0.864502, position_y=0.767212
+                ),
+                MapMarkerData(
+                    name="N5 Cave - South", position_x=0.831421, position_y=0.690430
+                ),
+                MapMarkerData(
+                    name="M5 Cave - North", position_x=0.761597, position_y=0.745361
+                ),
+                MapMarkerData(name="L5 Cave", position_x=0.719116, position_y=0.717651),
+                MapMarkerData(name="K5 Cave", position_x=0.678833, position_y=0.717407),
+                MapMarkerData(name="F5 Cave", position_x=0.320322, position_y=0.733055),
+                MapMarkerData(name="D5 Cave", position_x=0.237680, position_y=0.704246),
+                MapMarkerData(name="C5 Cave", position_x=0.144175, position_y=0.709617),
+                MapMarkerData(name="D6 Cave", position_x=0.231654, position_y=0.661831),
+                MapMarkerData(name="H6 Cave", position_x=0.481788, position_y=0.650512),
+                MapMarkerData(
+                    name="L6 Cave - North", position_x=0.705352, position_y=0.670272
+                ),
+                MapMarkerData(
+                    name="N6 Cave - West", position_x=0.824829, position_y=0.668457
+                ),
+                MapMarkerData(
+                    name="N6 Cave - East", position_x=0.871704, position_y=0.670410
+                ),
+                MapMarkerData(name="O7 Cave", position_x=0.911743, position_y=0.616699),
+                MapMarkerData(name="N7 Cave", position_x=0.817871, position_y=0.582642),
+                MapMarkerData(name="M7 Cave", position_x=0.777466, position_y=0.615967),
+                MapMarkerData(
+                    name="L7 Cave - West", position_x=0.696167, position_y=0.591797
+                ),
+                MapMarkerData(
+                    name="L7 Cave - South", position_x=0.707031, position_y=0.584961
+                ),
+                MapMarkerData(name="K7 Cave", position_x=0.655029, position_y=0.569824),
+                MapMarkerData(name="J7 Cave", position_x=0.569458, position_y=0.563599),
+                MapMarkerData(name="H7 Cave", position_x=0.482178, position_y=0.594238),
+                MapMarkerData(
+                    name="L9 Cave - South", position_x=0.693237, position_y=0.440063
+                ),
+                MapMarkerData(
+                    name="G9 Cave - North", position_x=0.426392, position_y=0.475708
+                ),
+                MapMarkerData(
+                    name="G9 Cave - South", position_x=0.414185, position_y=0.444702
+                ),
+                MapMarkerData(
+                    name="G10 Cave - South", position_x=0.418123, position_y=0.389663
+                ),
+                MapMarkerData(
+                    name="H10 Cave", position_x=0.460238, position_y=0.392471
+                ),
+                MapMarkerData(
+                    name="J10 Cave", position_x=0.589722, position_y=0.414551
+                ),
+                MapMarkerData(
+                    name="K10 Cave", position_x=0.632690, position_y=0.398926
+                ),
+                MapMarkerData(
+                    name="M10 Cave - Central", position_x=0.778076, position_y=0.400024
+                ),
+                MapMarkerData(
+                    name="M10 Cave - South", position_x=0.781860, position_y=0.387207
+                ),
+                MapMarkerData(
+                    name="N10 Cave - West", position_x=0.835571, position_y=0.405518
+                ),
+                MapMarkerData(
+                    name="O10 Cave", position_x=0.891724, position_y=0.378174
+                ),
+                MapMarkerData(
+                    name="M11 Cave", position_x=0.773804, position_y=0.344238
+                ),
+                MapMarkerData(
+                    name="L11 Cave", position_x=0.734619, position_y=0.315186
+                ),
+                MapMarkerData(
+                    name="J11 Cave", position_x=0.576294, position_y=0.313477
+                ),
+                MapMarkerData(
+                    name="C11 Cave - East", position_x=0.183105, position_y=0.356201
+                ),
+                MapMarkerData(
+                    name="B12 Cave - Central", position_x=0.092896, position_y=0.282837
+                ),
+                MapMarkerData(
+                    name="L12 Cave", position_x=0.704346, position_y=0.292725
+                ),
+                MapMarkerData(
+                    name="M12 Cave", position_x=0.772705, position_y=0.275024
+                ),
+                MapMarkerData(
+                    name="N12 Cave", position_x=0.832031, position_y=0.263184
+                ),
+                MapMarkerData(
+                    name="O13 Cave", position_x=0.936157, position_y=0.219727
+                ),
+                MapMarkerData(
+                    name="K13 Cave - South", position_x=0.677002, position_y=0.190552
+                ),
+                MapMarkerData(
+                    name="I13 Cave", position_x=0.529053, position_y=0.217285
+                ),
+                MapMarkerData(
+                    name="E13 Cave", position_x=0.270043, position_y=0.195990
+                ),
+                MapMarkerData(
+                    name="G14 Cave - Central", position_x=0.392334, position_y=0.145020
+                ),
+                MapMarkerData(
+                    name="G14 Cave - South", position_x=0.388916, position_y=0.126099
+                ),
+                MapMarkerData(
+                    name="H14 Cave - South", position_x=0.447266, position_y=0.137817
+                ),
+                MapMarkerData(
+                    name="H14 Cave - North", position_x=0.467529, position_y=0.172852
+                ),
+                MapMarkerData(
+                    name="H14 Cave - East", position_x=0.475708, position_y=0.145508
+                ),
+                MapMarkerData(
+                    name="M14 Cave - Central", position_x=0.789267, position_y=0.157912
+                ),
+                MapMarkerData(
+                    name="N15 Cave", position_x=0.847656, position_y=0.090698
+                ),
+            ],
+        ),
+        MapCategoryData(
+            slug="locations-cave-t2",
+            name="Caves - Tier 2",
+            color="#3F7791",
+            icon="https://cdn.rxtx-hosting.com/images/games/game_icarus/maps/icons/cave-t2.svg",
+            default_description="Tier 2 Cave",
+            markers=[
+                MapMarkerData(
+                    name="B3 Cave - East", position_x=0.113281, position_y=0.835449
+                ),
+                MapMarkerData(
+                    name="E3 Cave - North", position_x=0.277222, position_y=0.872681
+                ),
+                MapMarkerData(name="G3 Cave", position_x=0.406982, position_y=0.828369),
+                MapMarkerData(name="N3 Cave", position_x=0.868164, position_y=0.870972),
+                MapMarkerData(name="O3 Cave", position_x=0.878174, position_y=0.834839),
+                MapMarkerData(name="C4 Cave", position_x=0.150828, position_y=0.754432),
+                MapMarkerData(name="F4 Cave", position_x=0.333054, position_y=0.791439),
+                MapMarkerData(
+                    name="L4 Cave - South", position_x=0.720947, position_y=0.761353
+                ),
+                MapMarkerData(name="G5 Cave", position_x=0.380259, position_y=0.713645),
+                MapMarkerData(name="E5 Cave", position_x=0.256235, position_y=0.729881),
+                MapMarkerData(
+                    name="L6 Cave - South", position_x=0.704864, position_y=0.639632
+                ),
+                MapMarkerData(name="M6 Cave", position_x=0.803833, position_y=0.634399),
+                MapMarkerData(
+                    name="G7 Cave - North", position_x=0.399780, position_y=0.612183
+                ),
+                MapMarkerData(
+                    name="G7 Cave - South", position_x=0.391235, position_y=0.593262
+                ),
+                MapMarkerData(name="D7 Cave", position_x=0.232544, position_y=0.597900),
+                MapMarkerData(
+                    name="H8 Cave - North", position_x=0.455933, position_y=0.539917
+                ),
+                MapMarkerData(
+                    name="H8 Cave - South", position_x=0.466187, position_y=0.527222
+                ),
+                MapMarkerData(name="L8 Cave", position_x=0.748779, position_y=0.559082),
+                MapMarkerData(name="O9 Cave", position_x=0.923340, position_y=0.443970),
+                MapMarkerData(name="E9 Cave", position_x=0.255005, position_y=0.457153),
+                MapMarkerData(
+                    name="B10 Cave", position_x=0.116007, position_y=0.434037
+                ),
+                MapMarkerData(
+                    name="C10 Cave", position_x=0.152995, position_y=0.417314
+                ),
+                MapMarkerData(
+                    name="E11 Cave - West", position_x=0.250732, position_y=0.313477
+                ),
+                MapMarkerData(
+                    name="D11 Cave", position_x=0.216431, position_y=0.329712
+                ),
+                MapMarkerData(
+                    name="C11 Cave - West", position_x=0.155273, position_y=0.358276
+                ),
+                MapMarkerData(
+                    name="B12 Cave - West", position_x=0.123291, position_y=0.261230
+                ),
+                MapMarkerData(
+                    name="D12 Cave", position_x=0.236938, position_y=0.277100
+                ),
+                MapMarkerData(
+                    name="E12 Cave", position_x=0.279175, position_y=0.268311
+                ),
+                MapMarkerData(
+                    name="K13 Cave - West", position_x=0.685425, position_y=0.217773
+                ),
+                MapMarkerData(
+                    name="G13 Cave - East", position_x=0.410767, position_y=0.200439
+                ),
+                MapMarkerData(
+                    name="G13 Cave - West", position_x=0.391602, position_y=0.201904
+                ),
+                MapMarkerData(
+                    name="C13 Cave", position_x=0.133324, position_y=0.225286
+                ),
+                MapMarkerData(
+                    name="B13 Cave - North", position_x=0.084618, position_y=0.228338
+                ),
+                MapMarkerData(
+                    name="B13 Cave - South", position_x=0.085594, position_y=0.204168
+                ),
+                MapMarkerData(
+                    name="C14 Cave - North", position_x=0.125850, position_y=0.179539
+                ),
+                MapMarkerData(
+                    name="C14 Cave - South", position_x=0.128267, position_y=0.140696
+                ),
+                MapMarkerData(
+                    name="G14 Cave - North", position_x=0.390015, position_y=0.152710
+                ),
+                MapMarkerData(
+                    name="G14 Cave - East", position_x=0.435425, position_y=0.157349
+                ),
+                MapMarkerData(
+                    name="J14 Cave - West", position_x=0.568359, position_y=0.168335
+                ),
+                MapMarkerData(
+                    name="J14 Cave - East", position_x=0.623047, position_y=0.148193
+                ),
+                MapMarkerData(
+                    name="O15 Cave", position_x=0.878784, position_y=0.131104
+                ),
+                MapMarkerData(
+                    name="J15 Cave - West", position_x=0.575073, position_y=0.110718
+                ),
+                MapMarkerData(
+                    name="J15 Cave - South", position_x=0.593994, position_y=0.087280
+                ),
+                MapMarkerData(
+                    name="G15 Cave - North", position_x=0.400146, position_y=0.106934
+                ),
+                MapMarkerData(
+                    name="G15 Cave - South", position_x=0.405884, position_y=0.089111
+                ),
+                MapMarkerData(
+                    name="F15 Cave - East", position_x=0.373047, position_y=0.115845
+                ),
+                MapMarkerData(
+                    name="F15 Cave - West", position_x=0.320679, position_y=0.118042
+                ),
+                MapMarkerData(
+                    name="C15 Cave", position_x=0.172607, position_y=0.094604
+                ),
+            ],
+        ),
+        MapCategoryData(
+            slug="locations-cave-t3",
+            name="Caves - Tier 3",
+            color="#3F7791",
+            icon="https://cdn.rxtx-hosting.com/images/games/game_icarus/maps/icons/cave-t3.svg",
+            default_description="Tier 3 Cave",
+            markers=[
+                MapMarkerData(name="B2 Cave", position_x=0.091309, position_y=0.922119),
+                MapMarkerData(name="C2 Cave", position_x=0.143066, position_y=0.881714),
+                MapMarkerData(name="D2 Cave", position_x=0.204468, position_y=0.892212),
+                MapMarkerData(name="C3 Cave", position_x=0.175293, position_y=0.833252),
+                MapMarkerData(
+                    name="E3 Cave - Central", position_x=0.294067, position_y=0.857544
+                ),
+                MapMarkerData(name="F2 Cave", position_x=0.323853, position_y=0.935547),
+                MapMarkerData(name="G2 Cave", position_x=0.390259, position_y=0.889526),
+                MapMarkerData(name="F3 Cave", position_x=0.369995, position_y=0.871338),
+                MapMarkerData(name="H2 Cave", position_x=0.472046, position_y=0.884399),
+                MapMarkerData(
+                    name="M4 Cave - Central", position_x=0.779053, position_y=0.772461
+                ),
+                MapMarkerData(
+                    name="N4 Cave - North", position_x=0.863159, position_y=0.789307
+                ),
+                MapMarkerData(
+                    name="N4 Cave - South", position_x=0.864502, position_y=0.767212
+                ),
+                MapMarkerData(
+                    name="M5 Cave - Central", position_x=0.790894, position_y=0.731812
+                ),
+                MapMarkerData(name="B6 Cave", position_x=0.088755, position_y=0.635276),
+                MapMarkerData(name="F7 Cave", position_x=0.372925, position_y=0.597900),
+                MapMarkerData(
+                    name="M9 Cave - West", position_x=0.757446, position_y=0.468384
+                ),
+                MapMarkerData(
+                    name="M9 Cave - East", position_x=0.760864, position_y=0.470825
+                ),
+                MapMarkerData(
+                    name="L9 Cave - North", position_x=0.740479, position_y=0.492554
+                ),
+                MapMarkerData(
+                    name="D10 Cave", position_x=0.220011, position_y=0.414872
+                ),
+                MapMarkerData(
+                    name="G10 Cave - North", position_x=0.409700, position_y=0.435928
+                ),
+                MapMarkerData(
+                    name="G10 Cave - Central", position_x=0.395174, position_y=0.399551
+                ),
+                MapMarkerData(
+                    name="I10 Cave", position_x=0.521606, position_y=0.377075
+                ),
+                MapMarkerData(
+                    name="N10 Cave - Central", position_x=0.850464, position_y=0.415039
+                ),
+                MapMarkerData(
+                    name="P11 Cave", position_x=0.937988, position_y=0.354248
+                ),
+                MapMarkerData(
+                    name="K11 Cave", position_x=0.681763, position_y=0.317505
+                ),
+                MapMarkerData(
+                    name="F11 Cave", position_x=0.357178, position_y=0.362793
+                ),
+                MapMarkerData(
+                    name="E11 Cave - East", position_x=0.302856, position_y=0.331055
+                ),
+                MapMarkerData(
+                    name="O12 Cave", position_x=0.898071, position_y=0.307739
+                ),
+                MapMarkerData(
+                    name="K14 Cave", position_x=0.626221, position_y=0.151855
+                ),
+                MapMarkerData(
+                    name="M14 Cave - West", position_x=0.752890, position_y=0.175368
+                ),
+                MapMarkerData(
+                    name="M14 Cave - East", position_x=0.810141, position_y=0.166701
+                ),
+            ],
+        ),
+        MapCategoryData(
+            slug="locations-exotic-deposit",
+            name="Exotic Deposits",
+            color="#4b504f",
+            default_description="Exotic Deposit",
+            markers=[
+                MapMarkerData(
+                    name="Exotic Deposit", position_x=0.129883, position_y=0.755005
+                ),
+            ],
+        ),
+        MapCategoryData(
+            slug="locations-boss",
+            name="Bosses",
+            color="#ff0000",
+            icon="https://cdn.rxtx-hosting.com/images/games/game_icarus/maps/icons/boss.svg",
+            markers=[
+                MapMarkerData(
+                    name="Boss - Alpha Wolf",
+                    position_x=0.266113,
+                    position_y=0.905151,
+                    description="Boss - Alpha Wolf",
+                ),
+                MapMarkerData(
+                    name="Boss - Panther",
+                    position_x=0.227477,
+                    position_y=0.658332,
+                    description="Boss - Panther",
+                ),
+                MapMarkerData(
+                    name="Boss - Sandworm",
+                    position_x=0.174200,
+                    position_y=0.389918,
+                    description="Boss - Sandworm",
+                ),
+                MapMarkerData(
+                    name="Boss - Sandworm",
+                    position_x=0.237118,
+                    position_y=0.197085,
+                    description="Boss - Sandworm",
+                ),
+                MapMarkerData(
+                    name="Boss - Wolf",
+                    position_x=0.610229,
+                    position_y=0.107544,
+                    description="Boss - Wolf",
+                ),
+                MapMarkerData(
+                    name="Boss - Polar Bear",
+                    position_x=0.841292,
+                    position_y=0.096260,
+                    description="Boss - Polar Bear",
+                ),
+                MapMarkerData(
+                    name="Boss - Mammoth",
+                    position_x=0.535735,
+                    position_y=0.704769,
+                    description="Boss - Mammoth",
+                ),
+            ],
+        ),
+    ],
+)

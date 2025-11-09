@@ -1,10 +1,12 @@
 from .game_map import GameMapData
+from .games.enshrouded.embervale import DATA as enshrouded_embervale_data
+from .games.icarus.olympus import DATA as icarus_olympus_data
 from .map_data import MapData
-from .icarus.olympus import DATA as icarus_olympus_data
 
 
 MAPS: dict[tuple[str, str], MapData] = {
     ("game_icarus", "olympus"): icarus_olympus_data,
+    ("game_enshrouded", "embervale"): enshrouded_embervale_data,
 }
 
 

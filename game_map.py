@@ -17,7 +17,9 @@ class GameMapData(BaseModel):
     name: str
     slug: str
     description: str | None = None
-    image_url: str
+    image_url: str | None = None
+    tile_url: str | None = None
+    tile_size: int | None = None
     image_width: int
     image_height: int
     min_zoom: int
@@ -27,6 +29,7 @@ class GameMapData(BaseModel):
     default_center_y: float
     grid_system: str | None = None
     grid_options: GridStyleOptions | None = None
+    grid_visible_by_default: bool = True
 
     class Config:
         frozen = True
